@@ -1,115 +1,171 @@
 :root {
-  --bg: #f3f0e8;
-  --ink: #171717;
-  --muted: #6e6a61;
-  --line: #d8d0c1;
-  --tile: #fffaf0;
-  --tile-active: #cdd9ff;
-  --accent: #3157d5;
-  --accent-strong: #17338f;
-  --ok: #1f7a4d;
-  --warn: #9a431d;
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  /* -- palette: sanajuuri kasvaa mullasta kohti valoa -- */
+  --soil: #1e1a13;
+  --soil-2: #29231a;
+  --soil-3: #332b1f;
+  --paper: #f2e8d2;
+  --paper-dim: #a89d81;
+  --ink: #f4ecd9;
+  --ink-muted: #b7ab8c;
+  --moss: #9dc283;
+  --moss-deep: #6a9153;
+  --gold: #dba847;
+  --gold-deep: #a8792c;
+  --rust: #c96a42;
+  --line: #453c2c;
+
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
 }
 
 * {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
   min-height: 100svh;
   margin: 0;
-  background: var(--bg);
+  overflow-x: hidden;
+  background: var(--soil);
+  background-image:
+    radial-gradient(ellipse 620px 320px at 50% -8%, color-mix(in srgb, var(--moss) 14%, transparent), transparent),
+    linear-gradient(var(--soil), var(--soil));
   color: var(--ink);
 }
 
 button {
-  border: 1px solid var(--ink);
+  border: 0;
   background: transparent;
-  color: var(--ink);
+  color: inherit;
   font: inherit;
   cursor: pointer;
   touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 button:disabled {
   cursor: not-allowed;
-  opacity: 0.42;
+  opacity: 0.38;
 }
 
 .app-shell {
   width: min(100%, 430px);
   min-height: 100svh;
   margin: 0 auto;
-  padding: max(18px, env(safe-area-inset-top)) 18px max(18px, env(safe-area-inset-bottom));
+  padding: max(20px, env(safe-area-inset-top)) 18px max(18px, env(safe-area-inset-bottom));
   display: grid;
   grid-template-rows: auto auto 1fr auto auto auto;
-  gap: 14px;
+  gap: 16px;
 }
+
+/* ---------- header ---------- */
 
 .topbar {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
   gap: 16px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--line);
+}
+
+.topbar > div:first-child {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-width: 0;
+}
+
+h1 {
+  margin: 0;
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--paper);
+}
+
+.kicker {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 13px;
+  font-weight: 500;
 }
 
 .top-actions {
   display: flex;
   align-items: center;
   gap: 8px;
+  padding-bottom: 4px;
 }
 
 .new-game-top {
-  min-height: 36px;
+  min-height: 38px;
   border-radius: 999px;
-  padding: 0 12px;
+  padding: 0 16px;
   font-size: 13px;
-  font-weight: 800;
+  font-weight: 700;
   white-space: nowrap;
+  background: var(--gold);
+  color: #241a08;
 }
 
-.kicker {
-  margin: 0 0 2px;
-  color: var(--accent);
-  font-size: 13px;
-  font-weight: 800;
-  text-transform: uppercase;
-}
-
-h1 {
-  margin: 0;
-  font-size: 28px;
-  line-height: 1.05;
+.new-game-top:active:not(:disabled) {
+  background: var(--gold-deep);
 }
 
 .icon-button {
-  width: 42px;
-  height: 42px;
+  width: 38px;
+  height: 38px;
   border-radius: 999px;
   display: inline-grid;
   place-items: center;
-  font-size: 22px;
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink);
+  border: 1px solid var(--line);
 }
 
+.icon-button:active:not(:disabled) {
+  background: var(--soil-3);
+}
+
+/* ---------- status ---------- */
+
 .status-row {
-  min-height: 28px;
+  min-height: 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  color: var(--muted);
+  color: var(--ink-muted);
   font-size: 14px;
-  font-weight: 650;
+  font-weight: 500;
 }
+
+#score-label {
+  font-variant-numeric: tabular-nums;
+  color: var(--moss);
+  font-weight: 700;
+  background: color-mix(in srgb, var(--moss) 16%, transparent);
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+
+/* ---------- board ---------- */
 
 .board {
   align-self: center;
   display: grid;
   gap: 8px;
   justify-items: center;
-  padding: 8px 0;
+  padding: 18px 14px;
+  border-radius: 14px;
+  background: var(--soil-2);
+  border: 1px solid var(--line);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 6px 16px rgba(0, 0, 0, 0.3);
 }
 
 .word-row {
@@ -126,25 +182,42 @@ h1 {
 .letter {
   width: 34px;
   height: 34px;
-  border-radius: 7px;
+  border-radius: 8px;
   display: grid;
   place-items: center;
-  font-size: 21px;
+  font-size: 20px;
   line-height: 1;
-  font-weight: 750;
-}
-
-.tile {
-  background: var(--tile-active);
+  font-weight: 700;
 }
 
 .tile.empty {
-  border: 1px solid var(--line);
-  background: color-mix(in srgb, var(--tile) 36%, transparent);
+  border: 1.5px solid color-mix(in srgb, var(--paper) 40%, transparent);
+  background: color-mix(in srgb, var(--paper) 15%, var(--soil-2));
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35) inset;
 }
 
 .tile.solved {
-  background: #dff2d8;
+  background: linear-gradient(180deg, var(--moss) 0%, var(--moss-deep) 100%);
+  color: #16210f;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25) inset, 0 2px 4px rgba(0, 0, 0, 0.25);
+  animation: sprout 320ms ease-out;
+}
+
+@keyframes sprout {
+  from {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile.solved {
+    animation: none;
+  }
 }
 
 .dictionary-link {
@@ -152,25 +225,29 @@ h1 {
   left: calc(100% + 6px);
   top: 50%;
   transform: translateY(-50%);
-  width: 24px;
-  height: 24px;
-  border: 1px solid var(--accent);
+  width: 23px;
+  height: 23px;
+  border: 1px solid var(--gold);
   border-radius: 999px;
-  color: var(--accent);
+  color: var(--gold);
   display: grid;
   place-items: center;
-  font-size: 14px;
-  font-weight: 850;
+  font-size: 13px;
+  font-weight: 700;
   text-decoration: none;
+  font-style: italic;
+  font-family: "Iowan Old Style", Georgia, serif;
 }
 
 .dictionary-link:focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  outline: 2px solid var(--gold);
   outline-offset: 2px;
 }
 
+/* ---------- composer ---------- */
+
 .composer {
-  min-height: 74px;
+  min-height: 76px;
 }
 
 .answer-slots {
@@ -181,57 +258,81 @@ h1 {
 }
 
 .slot {
-  border: 1.5px solid var(--accent);
-  background: #ffffff;
+  border: 1.5px solid var(--gold-deep);
+  background: color-mix(in srgb, var(--gold) 12%, transparent);
+  color: var(--paper);
+}
+
+.slot:disabled {
+  border-style: solid;
+  border-color: color-mix(in srgb, var(--paper) 40%, transparent);
+  background: color-mix(in srgb, var(--paper) 10%, transparent);
+  opacity: 1;
 }
 
 .message {
-  min-height: 22px;
+  min-height: 20px;
   margin: 10px 0 0;
   text-align: center;
-  color: var(--muted);
+  color: var(--ink-muted);
   font-size: 14px;
-  font-weight: 650;
+  font-weight: 500;
 }
 
 .message.ok {
-  color: var(--ok);
+  color: var(--moss);
+  font-weight: 700;
 }
 
 .message.warn {
-  color: var(--warn);
+  color: var(--rust);
+  font-weight: 700;
 }
+
+/* ---------- letter bank ---------- */
 
 .letter-bank {
   display: grid;
-  grid-template-columns: repeat(4, 52px);
+  grid-template-columns: repeat(4, 54px);
   justify-content: center;
-  gap: 10px;
+  gap: 11px;
 }
 
 .letter {
-  width: 52px;
-  height: 50px;
-  border: 0;
-  background: #dedbd3;
-  font-size: 24px;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--soil);
+  font-size: 22px;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.35), 0 3px 6px rgba(0, 0, 0, 0.3);
+  transition: transform 90ms ease, box-shadow 90ms ease;
 }
 
 .letter.root-letter {
-  background: var(--tile-active);
+  background: var(--moss);
+  box-shadow: 0 2px 0 var(--moss-deep), 0 3px 6px rgba(0, 0, 0, 0.3);
 }
 
 .letter.selected {
-  box-shadow: inset 0 0 0 3px var(--accent-strong);
-  transform: translateY(1px);
+  background: var(--gold);
+  box-shadow: 0 1px 0 var(--gold-deep) inset;
+  transform: translateY(2px);
+}
+
+.letter:active:not(.inactive) {
+  transform: translateY(2px);
 }
 
 .letter.inactive {
-  background: #c8c3ba;
-  color: #7b766d;
+  background: var(--soil-3);
+  color: var(--paper-dim);
+  box-shadow: none;
   cursor: not-allowed;
-  opacity: 0.48;
+  opacity: 0.55;
 }
+
+/* ---------- controls ---------- */
 
 .controls {
   display: grid;
@@ -241,31 +342,46 @@ h1 {
 }
 
 .controls button:not(.icon-button) {
-  min-height: 44px;
+  min-height: 46px;
   border-radius: 999px;
   padding: 0 10px;
   font-size: 14px;
-  font-weight: 800;
+  font-weight: 700;
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+
+.controls button:not(.icon-button):active:not(:disabled) {
+  background: var(--soil-3);
+}
+
+#hint-button {
+  border-color: var(--gold-deep);
+  color: var(--gold);
 }
 
 #shuffle-button {
   width: 48px;
-  height: 44px;
+  height: 46px;
   border-radius: 999px;
-  font-size: 24px;
+  font-size: 22px;
+  border: 1px solid var(--line);
+  color: var(--ink);
 }
+
+/* ---------- dialog ---------- */
 
 dialog {
   width: min(340px, calc(100vw - 34px));
   border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 18px;
-  background: #fffdf8;
+  border-radius: 12px;
+  padding: 20px;
+  background: var(--soil-2);
   color: var(--ink);
 }
 
 dialog::backdrop {
-  background: rgb(0 0 0 / 0.22);
+  background: rgb(10 8 4 / 0.55);
 }
 
 .dialog-header {
@@ -277,17 +393,22 @@ dialog::backdrop {
 
 h2 {
   margin: 0;
-  font-size: 22px;
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 21px;
+  font-weight: 600;
+  color: var(--paper);
 }
 
 dialog p {
   margin: 14px 0 0;
-  color: var(--muted);
-  line-height: 1.45;
+  color: var(--ink-muted);
+  line-height: 1.5;
+  font-size: 15px;
 }
 
 .small-note {
   font-size: 13px;
+  color: var(--paper-dim);
 }
 
 @media (max-width: 360px) {
@@ -296,24 +417,20 @@ dialog p {
     padding-right: 12px;
   }
 
-  .word-row {
-    grid-auto-columns: 31px;
-    gap: 4px;
-  }
-
   .tile,
   .slot {
     width: 31px;
     height: 31px;
-    font-size: 19px;
+    font-size: 18px;
   }
 
   .letter-bank {
-    grid-template-columns: repeat(4, 48px);
-    gap: 8px;
+    grid-template-columns: repeat(4, 50px);
+    gap: 9px;
   }
 
   .letter {
-    width: 48px;
+    width: 50px;
+    height: 50px;
   }
 }

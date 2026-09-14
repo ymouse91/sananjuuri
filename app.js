@@ -339,7 +339,7 @@ function prepareStep() {
   markRootLetters(previous);
   pickedLetters = [];
   hintLevel = 0;
-  setMessage("Siniset kirjaimet ovat jo sanajuuressa.");
+  setMessage("Vihreät kirjaimet ovat jo sanajuuressa.");
   render();
   saveState();
 }
