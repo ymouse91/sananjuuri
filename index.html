@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="fi">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#f3f0e8">
+    <meta name="description" content="Suomenkielinen sanaketjupeli, joka toimii myös offline-tilassa.">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Sanajuuri">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Sanajuuri</title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <link rel="stylesheet" href="styles.css?v=14">
+  </head>
+  <body>
+    <main class="app-shell" aria-labelledby="app-title">
+      <header class="topbar">
+        <div>
+          <p class="kicker">Sananjuuri</p>
+          <h1 id="app-title">Kasvata sana</h1>
+        </div>
+        <div class="top-actions">
+          <button class="new-game-top" id="new-game-button" type="button">Uusi sana</button>
+          <button class="icon-button" id="info-button" type="button" aria-label="Avaa ohjeet">?</button>
+        </div>
+      </header>
+
+      <section class="status-row" aria-live="polite">
+        <span id="step-label">Ladataan sanastoa...</span>
+        <span id="score-label">0/0</span>
+      </section>
+
+      <section class="board" id="board" aria-label="Sanaketju"></section>
+
+      <section class="composer" aria-label="Muodosta seuraava sana">
+        <div class="answer-slots" id="answer-slots"></div>
+        <p class="message" id="message" aria-live="assertive"></p>
+      </section>
+
+      <section class="letter-bank" id="letter-bank" aria-label="Käytettävissä olevat kirjaimet"></section>
+
+      <footer class="controls">
+        <button id="clear-button" type="button">Tyhjennä</button>
+        <button id="shuffle-button" type="button" aria-label="Sekoita kirjaimet">↻</button>
+        <button id="hint-button" type="button">Vihje</button>
+      </footer>
+    </main>
+
+    <dialog id="info-dialog">
+      <div class="dialog-header">
+        <h2>Näin pelataan</h2>
+        <button class="icon-button" id="close-info" type="button" aria-label="Sulje ohjeet">×</button>
+      </div>
+      <p>Muodosta joka rivillä sana, joka käyttää kaikki edellisen sanan kirjaimet ja yhden uuden kirjaimen.</p>
+      <p>Kirjainten järjestystä saa vaihtaa. Vihje kertoo ensin lisättävän kirjaimen ja sitten seuraavan sanan alkukirjaimen.</p>
+      <p class="small-note">Tämä paikallinen versio käyttää projektin max 8 -sanalistaa.</p>
+    </dialog>
+
+    <script src="app.js?v=14"></script>
+  </body>
+</html>
