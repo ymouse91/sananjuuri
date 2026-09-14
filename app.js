@@ -1,4 +1,4 @@
-const WORDLIST_URL = "sanasto_max8.txt?v=20";
+const WORDLIST_URL = "sanasto_max8.txt?v=22";
 const STORAGE_KEY = "sanajuuri-state-v1";
 const MIN_LENGTH = 3;
 const MAX_LENGTH = 8;
@@ -240,14 +240,17 @@ function renderBoard() {
     const row = document.createElement("div");
     row.className = "word-row";
     row.setAttribute("aria-label", `${index + 1}. sana`);
+    const tiles = document.createElement("div");
+    tiles.className = "word-tiles";
 
     const visible = index === 0 || index < currentStep;
     [...word].forEach((char) => {
       const tile = document.createElement("div");
       tile.className = visible ? "tile solved" : "tile empty";
       tile.textContent = visible ? formatWord(char) : "";
-      row.append(tile);
+      tiles.append(tile);
     });
+    row.append(tiles);
 
     if (visible) {
       const link = document.createElement("a");

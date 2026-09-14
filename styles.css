@@ -52,10 +52,11 @@ button:disabled {
   width: min(100%, 430px);
   min-height: 100svh;
   margin: 0 auto;
-  padding: max(20px, env(safe-area-inset-top)) 18px max(18px, env(safe-area-inset-bottom));
+  padding: max(20px, env(safe-area-inset-top)) clamp(10px, 4vw, 18px) max(18px, env(safe-area-inset-bottom));
   display: grid;
   grid-template-rows: auto auto 1fr auto auto auto;
   gap: 16px;
+  overflow-x: clip;
 }
 
 /* ---------- header ---------- */
@@ -80,7 +81,7 @@ button:disabled {
 h1 {
   margin: 0;
   font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
-  font-size: 30px;
+  font-size: clamp(24px, 7.4vw, 30px);
   font-weight: 600;
   letter-spacing: 0.5px;
   text-transform: uppercase;
@@ -104,8 +105,8 @@ h1 {
 .new-game-top {
   min-height: 38px;
   border-radius: 999px;
-  padding: 0 16px;
-  font-size: 13px;
+  padding: 0 clamp(10px, 3vw, 16px);
+  font-size: clamp(12px, 3.2vw, 13px);
   font-weight: 700;
   white-space: nowrap;
   background: var(--gold);
@@ -161,7 +162,9 @@ h1 {
   display: grid;
   gap: 8px;
   justify-items: center;
-  padding: 18px 14px;
+  width: 100%;
+  max-width: 100%;
+  padding: 18px clamp(6px, 3vw, 14px);
   border-radius: 14px;
   background: var(--soil-2);
   border: 1px solid var(--line);
@@ -171,10 +174,16 @@ h1 {
 .word-row {
   position: relative;
   display: flex;
-  gap: 5px;
   justify-content: center;
+  width: 100%;
   min-height: 34px;
   align-items: center;
+}
+
+.word-tiles {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
 }
 
 .tile,
@@ -222,7 +231,7 @@ h1 {
 
 .dictionary-link {
   position: absolute;
-  left: calc(100% + 6px);
+  right: 0;
   top: 50%;
   transform: translateY(-50%);
   width: 23px;
@@ -419,9 +428,13 @@ dialog p {
 
   .tile,
   .slot {
-    width: 31px;
+    width: 30px;
     height: 31px;
     font-size: 18px;
+  }
+
+  .word-tiles {
+    gap: 4px;
   }
 
   .letter-bank {
