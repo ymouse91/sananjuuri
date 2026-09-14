@@ -1,4 +1,4 @@
-const WORDLIST_URL = "sanasto_max8.txt?v=18";
+const WORDLIST_URL = "sanasto_max8.txt?v=20";
 const STORAGE_KEY = "sanajuuri-state-v1";
 const MIN_LENGTH = 3;
 const MAX_LENGTH = 8;
@@ -106,6 +106,32 @@ function markRootLetters() {
   });
 }
 
+function markHintAvailability() {
+  const target = puzzle[currentStep];
+  if (!target || hintLevel === 0) {
+    bankLetters = bankLetters.map((item) => ({ ...item, isInactive: false }));
+    return;
+  }
+
+  const counts = new Map();
+  [...target].forEach((char) => counts.set(char, (counts.get(char) ?? 0) + 1));
+
+  bankLetters = bankLetters.map((item) => {
+    const count = counts.get(item.char) ?? 0;
+    if (count > 0) {
+      counts.set(item.char, count - 1);
+      return { ...item, isInactive: false };
+    }
+    return { ...item, isInactive: true, picked: false };
+  });
+
+  pickedLetters = pickedLetters.filter((item) => {
+    if (!bankLetters[item.bankIndex]?.isInactive) return true;
+    bankLetters[item.bankIndex].picked = false;
+    return false;
+  });
+}
+
 function formatWord(word) {
   return word.toLocaleUpperCase("fi-FI");
 }
@@ -153,6 +179,7 @@ function restoreState() {
       id: Number.isInteger(item.id) ? item.id : index,
       isRoot: Boolean(item.isRoot),
       picked: Boolean(item.picked),
+      isInactive: Boolean(item.isInactive),
     }));
     pickedLetters = Array.isArray(state.pickedLetters)
       ? state.pickedLetters
@@ -163,6 +190,7 @@ function restoreState() {
     guessCount = Number.isInteger(state.guessCount) ? state.guessCount : 0;
     hintCount = Number.isInteger(state.hintCount) ? state.hintCount : 0;
     markRootLetters();
+    markHintAvailability();
     render();
     setMessage(currentStep >= puzzle.length ? finishedMessage() : "Jatketaan tallennetusta kohdasta.", currentStep >= puzzle.length ? "ok" : "");
     saveState();
@@ -181,6 +209,7 @@ function startNewGame() {
     id: index,
     isRoot: false,
     picked: false,
+    isInactive: false,
   }));
   currentStep = 1;
   prepareStep();
@@ -263,10 +292,12 @@ function renderBank() {
       "letter",
       item.isRoot ? "root-letter" : "",
       item.picked ? "selected" : "",
+      item.isInactive ? "inactive" : "",
     ].filter(Boolean).join(" ");
     button.type = "button";
     button.textContent = formatWord(item.char);
     button.setAttribute("aria-pressed", item.picked ? "true" : "false");
+    button.setAttribute("aria-disabled", item.isInactive ? "true" : "false");
     button.addEventListener("click", () => pickLetter(index));
     letterBank.append(button);
   });
@@ -304,7 +335,7 @@ function prepareStep() {
   }
 
   const previous = puzzle[currentStep - 1];
-  bankLetters = bankLetters.map((item) => ({ ...item, picked: false }));
+  bankLetters = bankLetters.map((item) => ({ ...item, picked: false, isInactive: false }));
   markRootLetters(previous);
   pickedLetters = [];
   hintLevel = 0;
@@ -314,6 +345,8 @@ function prepareStep() {
 }
 
 function pickLetter(index) {
+  if (bankLetters[index].isInactive) return;
+
   if (bankLetters[index].picked) {
     const slotIndex = pickedLetters.findIndex((item) => item.bankIndex === index);
     if (slotIndex >= 0) unpickLetter(slotIndex);
@@ -379,25 +412,30 @@ function useHint() {
   if (hintLevel === 0 && isFinalWord) {
     hintLevel = 2;
     hintCount += 1;
+    markHintAvailability();
     setMessage(`Sana alkaa kirjaimella ${formatWord(target[0])}.`);
   } else if (hintLevel === 0) {
     hintLevel = 1;
     hintCount += 1;
+    markHintAvailability();
     setMessage(`Uusi kirjain on ${formatWord(extraLetter(previous, target))}.`);
   } else if (hintLevel === 1) {
     hintLevel = 2;
     hintCount += 1;
+    markHintAvailability();
     setMessage(`Sana alkaa kirjaimella ${formatWord(target[0])}.`);
   } else {
     setMessage(`Sana alkaa kirjaimella ${formatWord(target[0])}.`);
   }
+  render();
   saveState();
 }
 
 function shuffleBank() {
-  bankLetters = shuffle(bankLetters).map((item) => ({ ...item, picked: false }));
+  bankLetters = shuffle(bankLetters).map((item) => ({ ...item, picked: false, isInactive: false }));
   pickedLetters = [];
   markRootLetters();
+  markHintAvailability();
   setMessage("Kirjaimet sekoitettu.");
   render();
   saveState();

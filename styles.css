@@ -226,6 +226,13 @@ h1 {
   transform: translateY(1px);
 }
 
+.letter.inactive {
+  background: #c8c3ba;
+  color: #7b766d;
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+
 .controls {
   display: grid;
   grid-template-columns: 1fr 48px 1fr;

@@ -1,11 +1,11 @@
-const CACHE_NAME = "sanajuuri-v18";
+const CACHE_NAME = "sanajuuri-v20";
 const APP_SHELL = [
   "./",
-  "./?v=18",
+  "./?v=20",
   "./index.html",
-  "./styles.css?v=18",
-  "./app.js?v=18",
-  "./sanasto_max8.txt?v=18",
+  "./styles.css?v=20",
+  "./app.js?v=20",
+  "./sanasto_max8.txt?v=20",
   "./manifest.webmanifest",
   "./offline.html",
   "./icons/icon-192.png",
