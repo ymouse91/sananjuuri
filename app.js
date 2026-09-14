@@ -1,4 +1,4 @@
-const WORDLIST_URL = "sanasto_max8.txt?v=22";
+const WORDLIST_URL = "sanasto_max8.txt?v=24";
 const STORAGE_KEY = "sanajuuri-state-v1";
 const MIN_LENGTH = 3;
 const MAX_LENGTH = 8;

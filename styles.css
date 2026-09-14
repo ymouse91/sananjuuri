@@ -173,11 +173,10 @@ h1 {
 
 .word-row {
   position: relative;
-  display: flex;
-  justify-content: center;
-  width: 100%;
+  display: block;
+  width: fit-content;
+  max-width: 100%;
   min-height: 34px;
-  align-items: center;
 }
 
 .word-tiles {
@@ -231,17 +230,17 @@ h1 {
 
 .dictionary-link {
   position: absolute;
-  right: 0;
+  left: calc(100% + 4px);
   top: 50%;
   transform: translateY(-50%);
-  width: 23px;
-  height: 23px;
+  width: 20px;
+  height: 20px;
   border: 1px solid var(--gold);
   border-radius: 999px;
   color: var(--gold);
   display: grid;
   place-items: center;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   text-decoration: none;
   font-style: italic;
@@ -428,13 +427,20 @@ dialog p {
 
   .tile,
   .slot {
-    width: 30px;
-    height: 31px;
+    width: 28px;
+    height: 30px;
     font-size: 18px;
   }
 
   .word-tiles {
-    gap: 4px;
+    gap: 3px;
+  }
+
+  .dictionary-link {
+    left: calc(100% + 4px);
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
   }
 
   .letter-bank {
