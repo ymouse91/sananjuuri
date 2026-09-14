@@ -13,11 +13,11 @@ python -m http.server 8891 --bind 0.0.0.0
 Paikallinen osoite:
 
 ```text
-http://127.0.0.1:8891/?v=17
+http://127.0.0.1:8891/?v=18
 ```
 
 Lähiverkossa:
 
 ```text
-http://192.168.1.105:8891/?v=17
+http://192.168.1.105:8891/?v=18
 ```

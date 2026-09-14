@@ -2,7 +2,7 @@
   "name": "Sananjuuri",
   "short_name": "Sananjuuri",
   "description": "Suomenkielinen sanaketjupeli, joka toimii myös offline-tilassa.",
-  "start_url": "./?v=17",
+  "start_url": "./?v=18",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f3f0e8",

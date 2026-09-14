@@ -1,4 +1,4 @@
-const WORDLIST_URL = "sanasto_max8.txt?v=17";
+const WORDLIST_URL = "sanasto_max8.txt?v=18";
 const STORAGE_KEY = "sanajuuri-state-v1";
 const MIN_LENGTH = 3;
 const MAX_LENGTH = 8;
@@ -374,8 +374,13 @@ function useHint() {
   if (currentStep >= puzzle.length) return;
   const previous = puzzle[currentStep - 1];
   const target = puzzle[currentStep];
+  const isFinalWord = currentStep === puzzle.length - 1;
 
-  if (hintLevel === 0) {
+  if (hintLevel === 0 && isFinalWord) {
+    hintLevel = 2;
+    hintCount += 1;
+    setMessage(`Sana alkaa kirjaimella ${formatWord(target[0])}.`);
+  } else if (hintLevel === 0) {
     hintLevel = 1;
     hintCount += 1;
     setMessage(`Uusi kirjain on ${formatWord(extraLetter(previous, target))}.`);
