@@ -398,7 +398,7 @@ function checkAnswer() {
   }
 
   if (wordSet.has(guess)) {
-    setMessage("Sana löytyy listasta, mutta kirjaimet eivät täsmää.", "warn");
+    setMessage("Hyvä löytö, mutta emme etsii nyt tätä sanaa.", "warn");
   } else {
     setMessage("Tätä sanaa ei ole sanalistassa.", "warn");
   }
