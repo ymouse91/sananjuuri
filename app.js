@@ -1,4 +1,4 @@
-const WORDLIST_URL = "sanasto_max8.txt?v=24";
+const WORDLIST_URL = "sanasto_max8.txt?v=27";
 const STORAGE_KEY = "sanajuuri-state-v1";
 const MIN_LENGTH = 3;
 const MAX_LENGTH = 8;
@@ -27,6 +27,7 @@ let bankLetters = [];
 let hintLevel = 0;
 let guessCount = 0;
 let hintCount = 0;
+let rejectFlashTimer = null;
 
 function signature(word) {
   return [...word].sort().join("");
@@ -106,6 +107,14 @@ function markRootLetters() {
   });
 }
 
+function clearRejectedLetters() {
+  if (rejectFlashTimer) {
+    clearTimeout(rejectFlashTimer);
+    rejectFlashTimer = null;
+  }
+  bankLetters = bankLetters.map((item) => ({ ...item, isRejected: false }));
+}
+
 function markHintAvailability() {
   const target = puzzle[currentStep];
   if (!target || hintLevel === 0) {
@@ -180,6 +189,7 @@ function restoreState() {
       isRoot: Boolean(item.isRoot),
       picked: Boolean(item.picked),
       isInactive: Boolean(item.isInactive),
+      isRejected: false,
     }));
     pickedLetters = Array.isArray(state.pickedLetters)
       ? state.pickedLetters
@@ -296,6 +306,7 @@ function renderBank() {
       item.isRoot ? "root-letter" : "",
       item.picked ? "selected" : "",
       item.isInactive ? "inactive" : "",
+      item.isRejected ? "rejected" : "",
     ].filter(Boolean).join(" ");
     button.type = "button";
     button.textContent = formatWord(item.char);
@@ -338,13 +349,27 @@ function prepareStep() {
   }
 
   const previous = puzzle[currentStep - 1];
-  bankLetters = bankLetters.map((item) => ({ ...item, picked: false, isInactive: false }));
+  clearRejectedLetters();
+  bankLetters = bankLetters.map((item) => ({ ...item, picked: false, isInactive: false, isRejected: false }));
   markRootLetters(previous);
   pickedLetters = [];
   hintLevel = 0;
   setMessage("Vihreät kirjaimet ovat jo sanajuuressa.");
   render();
   saveState();
+}
+
+function flashRejectedLetter(index) {
+  clearRejectedLetters();
+  bankLetters[index].isRejected = true;
+  setMessage("Voit lisätä vain yhden uuden kirjaimen.", "warn");
+  render();
+
+  rejectFlashTimer = setTimeout(() => {
+    bankLetters[index].isRejected = false;
+    rejectFlashTimer = null;
+    render();
+  }, 520);
 }
 
 function pickLetter(index) {
@@ -356,6 +381,13 @@ function pickLetter(index) {
     return;
   }
 
+  const alreadyPickedNewLetter = pickedLetters.some((item) => !item.isRoot);
+  if (!bankLetters[index].isRoot && alreadyPickedNewLetter) {
+    flashRejectedLetter(index);
+    return;
+  }
+
+  bankLetters[index].isRejected = false;
   bankLetters[index].picked = true;
   pickedLetters.push({ ...bankLetters[index], bankIndex: index });
 
@@ -376,6 +408,7 @@ function unpickLetter(slotIndex) {
 }
 
 function clearAnswer() {
+  clearRejectedLetters();
   pickedLetters.forEach((item) => {
     bankLetters[item.bankIndex].picked = false;
   });
@@ -383,6 +416,14 @@ function clearAnswer() {
   setMessage("");
   render();
   saveState();
+}
+
+function resetSuggestion() {
+  clearRejectedLetters();
+  pickedLetters.forEach((item) => {
+    bankLetters[item.bankIndex].picked = false;
+  });
+  pickedLetters = [];
 }
 
 function checkAnswer() {
@@ -408,6 +449,7 @@ function checkAnswer() {
 
 function useHint() {
   if (currentStep >= puzzle.length) return;
+  resetSuggestion();
   const previous = puzzle[currentStep - 1];
   const target = puzzle[currentStep];
   const isFinalWord = currentStep === puzzle.length - 1;
@@ -435,7 +477,8 @@ function useHint() {
 }
 
 function shuffleBank() {
-  bankLetters = shuffle(bankLetters).map((item) => ({ ...item, picked: false, isInactive: false }));
+  clearRejectedLetters();
+  bankLetters = shuffle(bankLetters).map((item) => ({ ...item, picked: false, isInactive: false, isRejected: false }));
   pickedLetters = [];
   markRootLetters();
   markHintAvailability();

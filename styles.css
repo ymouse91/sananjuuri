@@ -340,6 +340,39 @@ h1 {
   opacity: 0.55;
 }
 
+.letter.rejected {
+  animation: reject-letter 520ms ease;
+}
+
+@keyframes reject-letter {
+  0%,
+  100% {
+    background: var(--paper);
+    color: var(--soil);
+    transform: translateX(0);
+  }
+  20%,
+  60% {
+    background: var(--rust);
+    color: var(--paper);
+    transform: translateX(-4px);
+  }
+  40%,
+  80% {
+    background: var(--rust);
+    color: var(--paper);
+    transform: translateX(4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .letter.rejected {
+    animation: none;
+    background: var(--rust);
+    color: var(--paper);
+  }
+}
+
 /* ---------- controls ---------- */
 
 .controls {
